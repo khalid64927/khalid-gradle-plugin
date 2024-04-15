@@ -1,0 +1,32 @@
+.settings
+.project
+.classpath
+.vscode
+build
+*.iml
+Pods
+xcuserdata
+local.properties
+local.gradle
+
+## IDE Files
+.idea/
+.gradle/
+*.iml
+
+## Compiled Output
+*.class
+build/
+.gradle/
+.idea/
+.gradle/
+**/build/
+**/out/
+
+## Android specific
+/.gradle
+/.idea
+/.gradle
+
+# Mac
+.DS_Store
