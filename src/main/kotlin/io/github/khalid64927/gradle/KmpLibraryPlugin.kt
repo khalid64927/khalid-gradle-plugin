@@ -34,7 +34,9 @@ class KmpLibraryPlugin : Plugin<Project> {
             macosX64()
             // watchOS
             watchosX64()
-            watchosX86()
+            /*Using 'watchosX86(): KotlinNativeTargetWithSimulatorTests' is an error.
+            Target is no longer available. See: https://kotl.in/native-targets-tiers*/
+            //watchosX86()
             watchosArm32()
             watchosArm64()
             watchosSimulatorArm64()

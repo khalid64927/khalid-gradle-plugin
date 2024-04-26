@@ -101,20 +101,12 @@ gradlePlugin {
 }
 
 publishing {
-    repositories.maven("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
-        name = "OSSRH"
-
-        credentials {
-            username = System.getenv("OSSRH_USER")
-            password = System.getenv("OSSRH_KEY")
-        }
-    }
     publications {
         register("mavenJava", MavenPublication::class) {
             from(components["java"])
 
             pom {
-                name.set("khalid gradle plugin")
+                name.set("khalid-gradle-plugin")
                 description.set("This is a Gradle plugin with common build logic for all KMP libraries in my open source repo.")
                 url.set("https://github.com/khalid64927/khalid-gradle-plugin")
                 licenses {
@@ -141,9 +133,18 @@ publishing {
             }
         }
     }
-}
 
+    repositories.maven("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
+        name = "OSSRH"
+
+        credentials {
+            username = System.getenv("OSSRH_USER")
+            password = System.getenv("OSSRH_KEY")
+        }
+    }
+}
 signing {
+    useGpgCmd()
     val signingKeyId: String? = System.getenv("SIGNING_KEY_ID")
     val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
     val signingKey: String? = System.getenv("SIGNING_KEY")?.let { base64Key ->
@@ -151,7 +152,14 @@ signing {
     }
 
     if (signingKeyId != null) {
+        println("signingKeyId : $signingKeyId")
+        println("signingPassword : $signingPassword")
+        println("signingKey : $signingKey")
+        useGpgCmd()
         useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
-        sign(configurations.archives.get())
+        sign(publishing.publications)
+        //sign(configurations.archives.get()) // This allows to publish but the .asc files are missing
+
     }
 }
+

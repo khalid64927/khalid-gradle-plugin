@@ -18,7 +18,7 @@ class AndroidBasePlugin : Plugin<Project> {
         val minSdkValue: Int = target.requiredIntProperty("android.minSdk")
 
         target.configure<BaseExtension> {
-            //compileSdkVersions(compileSdkValue)
+            compileSdkVersion(compileSdkValue)
             defaultConfig {
                 minSdk = minSdkValue
                 targetSdk = targetSdkValue
