@@ -1,11 +1,12 @@
 [versions]
 khalidGradlePluginVersion = "0.1.0"
 
-kotlinVersion = "1.8.10"
-androidGradlePluginVerison = "7.4.2"
+kotlinVersion = "1.9.23"
+androidGradlePluginVerison = "8.3.0"
 mobileMultiplatformVersion = "0.14.2"
 detektVersion = "1.22.0"
 nexusPublishVersion = "1.1.0"
+vanniktechVersion = "0.28.0"
 
 [libraries]
 androidGradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePluginVerison" }
@@ -13,3 +14,4 @@ kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", ver
 mobileMultiplatformGradlePlugin = { module = "dev.icerock:mobile-multiplatform", version.ref = "mobileMultiplatformVersion" }
 detektGradlePlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detektVersion" }
 nexusPublishGradlePlugin = { module = "io.github.gradle-nexus:publish-plugin", version.ref = "nexusPublishVersion" }
+vanniktechPublishGradlePlugin = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "vanniktechVersion" }

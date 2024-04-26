@@ -1,10 +1,33 @@
 [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0) [![Download](https://img.shields.io/maven-central/v/io/github/khalid64927/khalid-gradle-plugin) ](https://repo1.maven.org/maven2/io/github/khalid64927/khalid-gradle-plugin/)
 
 # khalid gradle plugin
-TODO
+This plugin is based on [moko-gradle-plugin] (https://github.com/icerockdev/moko-gradle-plugin)
 
 ## Setup
-TODO
+Add below ENV 
+
+```shell
+
+# Publishing
+export OSSRH_USER="<username>"
+export OSSRH_KEY="<alphanumeric pwd>"
+export SIGNING_KEY_ID1=F312210C487AA8669E069A13B66B61C5A32EEAA4
+export SIGNING_KEY_ID="<B669848B>"
+export SIGNING_PASSWORD="<passphrase>"
+export SIGNING_KEY="<base64 encoded PGP private key block>"
+
+# vannitech plugin variables
+export ORG_GRADLE_PROJECT_SONATYPE_NEXUS_USERNAME=$OSSRH_USER
+export ORG_GRADLE_PROJECT_mavenCentralUsername=$OSSRH_USER
+export ORG_GRADLE_PROJECT_SONATYPE_NEXUS_PASSWORD=$OSSRH_KEY
+export ORG_GRADLE_PROJECT_mavenCentralPassword=$OSSRH_KEY
+
+#PGP PRIVATE KEY BLOCK
+export ORG_GRADLE_PROJECT_SIGNING_KEY=$SIGNING_KEY
+export ORG_GRADLE_PROJECT_signingInMemoryKey=$SIGNING_KEY
+
+```
+
 
 ## Usage
 TODO

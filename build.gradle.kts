@@ -2,13 +2,12 @@
  * Copyright 2024 Mohammed Khalid Hamid. Use of this source code is governed by the Apache 2.0 license.
  */
 
+import com.vanniktech.maven.publish.SonatypeHost
 import java.util.Base64
 
 plugins {
     `kotlin-dsl`
-    id("org.gradle.maven-publish")
-    id("signing")
-    id("java-gradle-plugin")
+    id("com.vanniktech.maven.publish") version ("0.28.0")
 }
 
 group = "io.github.khalid64927"
@@ -26,15 +25,15 @@ dependencies {
     api(libs.kotlinGradlePlugin)
     api(libs.mobileMultiplatformGradlePlugin)
     api(libs.detektGradlePlugin)
-    api(libs.nexusPublishGradlePlugin)
+    api(libs.vanniktechPublishGradlePlugin)
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
-    withJavadocJar()
-    withSourcesJar()
-}
+//java {
+//    sourceCompatibility = JavaVersion.VERSION_11
+//    targetCompatibility = JavaVersion.VERSION_11
+//    withJavadocJar()
+//    withSourcesJar()
+//}
 
 gradlePlugin {
     plugins {
@@ -73,85 +72,42 @@ gradlePlugin {
             id = "io.github.khalid64927.gradle.publication"
             implementationClass = "io.github.khalid64927.gradle.PublicationPlugin"
         }
-        create("publication-nexus") {
-            id = "io.github.khalid64927.gradle.publication.nexus"
-            implementationClass = "io.github.khalid64927.gradle.NexusPublicationPlugin"
-        }
-
-        create("publication-hosts") {
-            id = "io.github.khalid64927.gradle.publication.hosts"
-            implementationClass = "io.github.khalid64927.gradle.HostsPublicationPlugin"
-        }
-
-        create("stubjavadoc") {
-            id = "io.github.khalid64927.gradle.stub.javadoc"
-            implementationClass = "io.github.khalid64927.gradle.StubJavaDocPlugin"
-        }
 
         create("tests") {
             id = "io.github.khalid64927.gradle.tests"
             implementationClass = "io.github.khalid64927.gradle.TestsReportPlugin"
         }
 
-        create("jvm") {
-            id = "io.github.khalid64927.gradle.jvm"
-            implementationClass = "io.github.khalid64927.gradle.JvmPlugin"
-        }
     }
 }
 
-publishing {
-    repositories.maven("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
-        name = "OSSRH"
-
-        credentials {
-            username = System.getenv("OSSRH_USER")
-            password = System.getenv("OSSRH_KEY")
-        }
-    }
-    publications {
-        register("mavenJava", MavenPublication::class) {
-            from(components["java"])
-
-            pom {
-                name.set("khalid gradle plugin")
-                description.set("This is a Gradle plugin with common build logic for all KMP libraries in my open source repo.")
-                url.set("https://github.com/khalid64927/khalid-gradle-plugin")
-                licenses {
-                    license {
-                        name.set("Apache-2.0")
-                        distribution.set("repo")
-                        url.set("https://github.com/khalid64927/khalid-gradle-plugin/blob/master/LICENSE.md")
-                    }
-                }
-
-                developers {
-                    developer {
-                        id.set("khalid64927")
-                        name.set("Mohammed Khalid Hamid")
-                        email.set("khalid64927@gmail.com")
-                    }
-                }
-
-                scm {
-                    connection.set("scm:git:ssh://github.com/khalid64927/khalid-gradle-plugin.git")
-                    developerConnection.set("scm:git:ssh://github.com/khalid64927/khalid-gradle-plugin.git")
-                    url.set("https://github.com/khalid64927/khalid-gradle-plugin")
-                }
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.S01, automaticRelease = true)
+    //publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
+    pom {
+        name.set("khalid gradle plugin")
+        description.set("This is a Gradle plugin with common build logic for all KMP libraries in my open source repo.")
+        url.set("https://github.com/khalid64927/khalid-gradle-plugin")
+        licenses {
+            license {
+                name.set("Apache-2.0")
+                distribution.set("repo")
+                url.set("https://github.com/khalid64927/khalid-gradle-plugin/blob/master/LICENSE.md")
             }
         }
-    }
-}
 
-signing {
-    val signingKeyId: String? = System.getenv("SIGNING_KEY_ID")
-    val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
-    val signingKey: String? = System.getenv("SIGNING_KEY")?.let { base64Key ->
-        String(Base64.getDecoder().decode(base64Key))
-    }
+        developers {
+            developer {
+                id.set("khalid64927")
+                name.set("Mohammed Khalid Hamid")
+                email.set("khalid64927@gmail.com")
+            }
+        }
 
-    if (signingKeyId != null) {
-        useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
-        sign(configurations.archives.get())
+        scm {
+            connection.set("scm:git:ssh://github.com/khalid64927/khalid-gradle-plugin.git")
+            developerConnection.set("scm:git:ssh://github.com/khalid64927/khalid-gradle-plugin.git")
+            url.set("https://github.com/khalid64927/khalid-gradle-plugin")
+        }
     }
 }

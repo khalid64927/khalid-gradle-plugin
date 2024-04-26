@@ -19,8 +19,7 @@ class PublicationPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
         with(target.plugins) {
-            apply("org.gradle.maven-publish")
-            apply("signing")
+            apply("com.vanniktech.maven.publish")
         }
 
         val libraryName: String = target.requiredStringProperty("publish.name")
@@ -33,8 +32,7 @@ class PublicationPlugin : Plugin<Project> {
         val sshUrl = "scm:git:ssh://github.com/$gitHubOrganization/$gitHubName.git"
         val developersList: List<Developer> = developersString.split(",").map { parseDeveloper(it) }
 
-        target.configure<PublishingExtension> {
-            publications.withType<MavenPublication> {
+        target.configure<MavenPublication> {
                 // Provide artifacts information required by Maven Central
                 pom {
                     this.name.set(libraryName)
@@ -64,21 +62,8 @@ class PublicationPlugin : Plugin<Project> {
                         this.url.set(gitHubUrl)
                     }
                 }
-            }
         }
 
-        target.configure<SigningExtension> {
-            val signingKeyId: String? = System.getenv("SIGNING_KEY_ID")
-            val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
-            val signingKey: String? = System.getenv("SIGNING_KEY")?.let { base64Key ->
-                String(Base64.getDecoder().decode(base64Key))
-            }
-
-            if (signingKeyId != null) {
-                useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
-                sign(configuration.artifacts.toString())
-            }
-        }
     }
 
     private fun parseDeveloper(text: String): Developer {
