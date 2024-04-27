@@ -144,22 +144,13 @@ publishing {
     }
 }
 signing {
-    useGpgCmd()
-    val signingKeyId: String? = System.getenv("SIGNING_KEY_ID")
     val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
     val signingKey: String? = System.getenv("SIGNING_KEY")?.let { base64Key ->
         String(Base64.getDecoder().decode(base64Key))
     }
-
-    if (signingKeyId != null) {
-        println("signingKeyId : $signingKeyId")
-        println("signingPassword : $signingPassword")
-        println("signingKey : $signingKey")
-        useGpgCmd()
-        useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
-        sign(publishing.publications)
-        //sign(configurations.archives.get()) // This allows to publish but the .asc files are missing
-
+    if(signingKey != null){
+        useInMemoryPgpKeys(signingKey, signingPassword)
     }
+    sign(publishing.publications)
 }
 
