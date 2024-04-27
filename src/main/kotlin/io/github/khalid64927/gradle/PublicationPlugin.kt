@@ -11,6 +11,7 @@ import org.gradle.api.Project
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
 import org.gradle.plugins.signing.SigningExtension
 import java.util.Base64
@@ -68,15 +69,14 @@ class PublicationPlugin : Plugin<Project> {
         }
 
         target.configure<SigningExtension> {
-            val signingKeyId: String? = System.getenv("SIGNING_KEY_ID")
             val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
             val signingKey: String? = System.getenv("SIGNING_KEY")?.let { base64Key ->
                 String(Base64.getDecoder().decode(base64Key))
             }
 
-            if (signingKeyId != null) {
-                useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
-                sign(configuration.artifacts.toString())
+            if (signingKey != null && signingPassword != null) {
+                useInMemoryPgpKeys(signingKey, signingPassword)
+                sign(target.extensions.getByType<PublishingExtension>().publications)
             }
         }
     }

@@ -148,9 +148,9 @@ signing {
     val signingKey: String? = System.getenv("SIGNING_KEY")?.let { base64Key ->
         String(Base64.getDecoder().decode(base64Key))
     }
-    if(signingKey != null){
+    if (signingKey != null && signingPassword != null) {
         useInMemoryPgpKeys(signingKey, signingPassword)
+        sign(publishing.publications)
     }
-    sign(publishing.publications)
 }
 
