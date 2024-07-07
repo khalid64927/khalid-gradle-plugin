@@ -1,5 +1,5 @@
 [versions]
-khalidGradlePluginVersion = "0.2.1"
+khalidGradlePluginVersion = "0.2.2"
 
 kotlinVersion = "1.9.20"
 androidGradlePluginVerison = "7.4.2"

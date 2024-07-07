@@ -7,6 +7,7 @@ import java.util.Base64
 plugins {
     `kotlin-dsl`
     id("org.gradle.maven-publish")
+    id("com.gradle.plugin-publish") version ("0.15.0") // This plugin publish's to gradle plugin portal
     id("signing")
     id("java-gradle-plugin")
 }
@@ -153,4 +154,19 @@ signing {
         sign(publishing.publications)
     }
 }
+
+pluginBundle {
+    website = "https://github.com/khalid64927/khalid-gradle-plugin"
+    vcsUrl = "https://github.com/khalid64927/khalid-gradle-plugin"
+    description = "This is a Gradle plugin with common build logic for all KMP libraries in my open source repo."
+    tags = listOf("kotlin", "kotlin-multiplatform")
+
+    mavenCoordinates {
+        groupId = project.group as String
+        artifactId = project.name
+        version = project.version as String
+    }
+}
+
+
 
